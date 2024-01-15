@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect} from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ArticleList } from './components/ArticleList';
+import { Header } from './components/Header';
+
+
 
 
 function App() {
-  const [state, setState] = useState()
-  return (
-    <div className="App">
-      <p>balblabla</p>
 
-    </div>
+
+  return (
+    <BrowserRouter>
+    <Header/>
+    <main>
+    <Routes>
+    <Route path='/' element={
+            <ArticleList/>
+          }/>
+    </Routes>
+    </main>
+    </BrowserRouter>
   );
 }
 
