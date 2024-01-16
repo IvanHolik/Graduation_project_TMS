@@ -1,5 +1,6 @@
 import { createContext, useState } from "react"
 import { getInputSearch } from "../store/inputSlice"
+import { getOffset } from "../store/offsetSlice"
 import { useAppDispatch } from "../store/store"
 
 export const Header: React.FC = () => {
@@ -7,6 +8,7 @@ export const Header: React.FC = () => {
     const [inputValue, setInputValue] = useState('')
     const dispatch = useAppDispatch()
     const sendInputSearch = () => {
+        dispatch(getOffset(0))
         dispatch(getInputSearch(inputValue))
     }
     return (
@@ -30,6 +32,7 @@ export const Header: React.FC = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={(e) => {
                            if(e.key === 'Enter') {
+                            dispatch(getOffset(0))
                             return sendInputSearch();
                            }
                         }}

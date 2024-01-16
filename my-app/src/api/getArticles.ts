@@ -54,6 +54,18 @@ export const getArticles = async(params: string): Promise<paginatedArticleList> 
         }
     })
     // console.log(params)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
 }
+
+// export const crossArticlesPage = async (request: string) : Promise<paginatedArticleList> => {
+//   const response = await axios.get(request,
+//   {
+//       headers: {
+//           "Content-type" : "Application/json"
+//       }
+//   })
+//   // console.log(params)
+//   console.log(response.data)
+//   return response.data;
+// }
