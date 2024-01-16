@@ -57,6 +57,17 @@ export const getArticles = async(params: string): Promise<paginatedArticleList> 
     // console.log(response.data)
     return response.data;
 }
+export const getArticle = async(id: number): Promise<IArticle> => {
+    const response = await axios.get(`https://api.spaceflightnewsapi.net/v4/articles/${id}/`,
+    {
+        headers: {
+            "Content-type" : "Application/json"
+        }
+    })
+    // console.log(params)
+    // console.log(response.data)
+    return response.data;
+}
 
 // export const crossArticlesPage = async (request: string) : Promise<paginatedArticleList> => {
 //   const response = await axios.get(request,

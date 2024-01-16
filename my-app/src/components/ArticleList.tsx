@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getArticles, IArticle, paramsToString } from "../api/getArticles";
+import { Link, useParams } from "react-router-dom";
+import { getArticle, getArticles, IArticle, paramsToString } from "../api/getArticles";
 import { getPubishedParam } from "../helperFunctions";
 import { getOffset } from "../store/offsetSlice";
 import { RootState, useAppDispatch, useAppSelector } from "../store/store";
@@ -32,6 +32,7 @@ export const ArticleList: React.FC = () => {
   const dates = useRef(getPubishedParam(publishedAt));
   dates.current = getPubishedParam(publishedAt);
   let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b]";
+  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030]"; 
 
 
   const params = paramsToString({
@@ -63,6 +64,12 @@ export const ArticleList: React.FC = () => {
     f();
     // console.log(dates.current)
   }, [limit, offset, searchInputText, publishedAt,sortBy])
+
+  const getArtcl = async(id:number) => {
+    const article = await getArticle(id).then(
+      // response => 
+    )
+  }
   return (
     <div className="container text-white">
       <h1 className='text-5xl bold font-bold mb-9'>Article List</h1>
@@ -70,12 +77,15 @@ export const ArticleList: React.FC = () => {
       <div className="flex justify-between mb-[64px]">
         <div onClick={(e: any) => {
           setPublishedAt(e.target.id)
+          if(publishedAt === e.target.id) {
+            e.target.className = btnActive;
+          }
         }}
           className="flex gap-x-4">
-          <button id="day" className={btnClass}>Day</button>
-          <button id="week" className={btnClass}>Week</button>
-          <button id="mounth" className={btnClass}>Month</button>
-          <button id="year" className={btnClass}>Year</button>
+          <button id="day" className={publishedAt === "day" ? btnActive : btnClass}>Day</button>
+          <button id="week" className={publishedAt === "week" ? btnActive : btnClass}>Week</button>
+          <button id="mounth" className={publishedAt === "mounth" ? btnActive : btnClass}>Month</button>
+          <button id="year" className={publishedAt === "year" ? btnActive : btnClass}>Year</button>
         </div>
         <div className="relative w-full lg:max-w-sm">
           <select onChange={(e) => {
@@ -91,7 +101,9 @@ export const ArticleList: React.FC = () => {
       <div className="grid grid-cols-4 gap-x-8 gap-y-10 max-w-[1120px] mb-[72px]">
         {loading && <p>Loading...</p>}
         {articles && articles.map((article: IArticle) => {
-          return <div className="flex flex-col bg-[#1a605b] border-inherit rounded-2xl" key={article.id}>
+          const path = `/articles/:${article.id}`
+          return <Link to={path}>
+                    <div className="flex flex-col bg-[#1a605b] border-inherit rounded-2xl" key={article.id}>
             <div className='img-wrapper'>
               <img className="w-full h-full object-cover border-inherit rounded-t-2xl" src={article.image_url} alt="" />
             </div>
@@ -99,8 +111,8 @@ export const ArticleList: React.FC = () => {
               <p className="mb-2">{article.published_at}</p>
               <p>{article.title}</p>
             </div>
-
           </div>
+          </Link>
         })}
       </div>
       <div className="flex justify-between mb-[72px]">
