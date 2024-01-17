@@ -32,7 +32,7 @@ export const ArticleList: React.FC = () => {
   const dates = useRef(getPubishedParam(publishedAt));
   dates.current = getPubishedParam(publishedAt);
   let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b]";
-  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030]"; 
+  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030]";
 
 
   const params = paramsToString({
@@ -63,23 +63,28 @@ export const ArticleList: React.FC = () => {
     }
     f();
     // console.log(dates.current)
-  }, [limit, offset, searchInputText, publishedAt,sortBy])
+  }, [limit, offset, searchInputText, publishedAt, sortBy])
 
-  const getArtcl = async(id:number) => {
-    const article = await getArticle(id).then(
-      // response => 
-    )
-  }
+
   return (
     <div className="container text-white">
-      <h1 className='text-5xl bold font-bold mb-9'>Article List</h1>
+      <div className="flex gap-x-4 mb-9">
+        <h1 className='text-5xl bold font-bold'>Article List</h1>
+        {loading && <div
+          className="inline-block h-8 w-8 animate-spin self-center rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+          role="status">
+          <span
+            className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span>
+        </div>}
+      </div>
       {/* {loading && <p>Loading...</p>} */}
       <div className="flex justify-between mb-[64px]">
         <div onClick={(e: any) => {
+         if(e.target.id) {
           setPublishedAt(e.target.id)
-          if(publishedAt === e.target.id) {
-            e.target.className = btnActive;
-          }
+          dispatch(getOffset(0))
+         }
         }}
           className="flex gap-x-4">
           <button id="day" className={publishedAt === "day" ? btnActive : btnClass}>Day</button>
@@ -90,7 +95,8 @@ export const ArticleList: React.FC = () => {
         <div className="relative w-full lg:max-w-sm">
           <select onChange={(e) => {
             setSortBy(e.target.value)
-            dispatch(getOffset(0))}} 
+            dispatch(getOffset(0))
+          }}
             className="w-full p-2.5 text-white bg-[#1a605b] border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
             <option value="search">-</option>
             <option value="title_contains">Title</option>
@@ -99,19 +105,19 @@ export const ArticleList: React.FC = () => {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-x-8 gap-y-10 max-w-[1120px] mb-[72px]">
-        {loading && <p>Loading...</p>}
+        {/* {loading && <p>Loading...</p>} */}
         {articles && articles.map((article: IArticle) => {
           const path = `/articles/:${article.id}`
           return <Link to={path}>
-                    <div className="flex flex-col bg-[#1a605b] border-inherit rounded-2xl" key={article.id}>
-            <div className='img-wrapper'>
-              <img className="w-full h-full object-cover border-inherit rounded-t-2xl" src={article.image_url} alt="" />
+            <div className="flex flex-col bg-[#1a605b] border-inherit rounded-2xl" key={article.id}>
+              <div className='img-wrapper'>
+                <img className="w-full h-full max-h-[208px] object-cover border-inherit rounded-t-2xl" src={article.image_url} alt="" />
+              </div>
+              <div className="p-8">
+                <p className="mb-2">{article.published_at}</p>
+                <p>{article.title}</p>
+              </div>
             </div>
-            <div className="p-8">
-              <p className="mb-2">{article.published_at}</p>
-              <p>{article.title}</p>
-            </div>
-          </div>
           </Link>
         })}
       </div>
