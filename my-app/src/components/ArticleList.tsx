@@ -12,7 +12,10 @@ export const ArticleList: React.FC = () => {
   // const [offset, setOffset] = useState<number>(0)
   const offset = useAppSelector((state: RootState) => state.offset.value)
   const [articlesCount, setArticlesCount] = useState<number>(0)
+
   const searchInputText = useAppSelector((state: RootState) => state.searchInput.value);
+  const darkTheme = useAppSelector((state: RootState) => state.theme.value);
+  
   const [sortBy, setSortBy] = useState<string>('search')
   const [publishedAt, setPublishedAt] = useState<string>('day');
   const [prevPage, setPrevPage] = useState<string | null>(null);
@@ -31,8 +34,8 @@ export const ArticleList: React.FC = () => {
 
   const dates = useRef(getPubishedParam(publishedAt));
   dates.current = getPubishedParam(publishedAt);
-  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b]";
-  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030]";
+  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition ease-in-out";
+  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030] transition ease-in-out";
 
 
   const params = paramsToString({
