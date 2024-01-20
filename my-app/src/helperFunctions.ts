@@ -33,3 +33,15 @@ const formatDate = (date: Date) => {
   let year = date.getFullYear();
   return year + "-" + month + "-" + day;
 }
+
+export const paramsToString = (params: object): string => {
+  const paramsArr = Object.entries(params);
+  const result = paramsArr.reduce((res, param, i) => {
+    if (i !== paramsArr.length - 1) {
+      return res + encodeURIComponent(param[0]) + "=" + encodeURIComponent(param[1]) + "&";
+    }else{
+     return res + encodeURIComponent(param[0]) + "=" + encodeURIComponent(param[1]);
+    }
+  }, "")
+  return result;
+}

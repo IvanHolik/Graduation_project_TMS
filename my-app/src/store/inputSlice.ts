@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export const searchInputSlice = createSlice({
     name: 'search input',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState: {
         value: '',
     },

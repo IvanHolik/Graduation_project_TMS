@@ -1,4 +1,5 @@
 import axios from "axios"
+import { ACCSESS_TOKEN } from "../constants/constants"
 
 export interface paginatedArticleList {
     count: number,
@@ -34,41 +35,65 @@ export interface paginatedArticleList {
       ]
   }
 
-  export const paramsToString = (params: object): string => {
-    const paramsArr = Object.entries(params);
-    const result = paramsArr.reduce((res, param, i) => {
-      if (i !== paramsArr.length - 1) {
-        return res + encodeURIComponent(param[0]) + "=" + encodeURIComponent(param[1]) + "&";
-      }else{
-       return res + encodeURIComponent(param[0]) + "=" + encodeURIComponent(param[1]);
-      }
-    }, "")
-    return result;
-  }
+  export const articleAxios = axios.create({
+    baseURL: 'https://api.spaceflightnewsapi.net/v4/articles/',
+    headers: {
+        'Content-Type': 'application/json',
+
+    }
+});
 
 export const getArticles = async(params: string): Promise<paginatedArticleList> => {
-    const response = await axios.get(`https://api.spaceflightnewsapi.net/v4/articles/?${params}`,
-    {
-        headers: {
-            "Content-type" : "Application/json"
-        }
-    })
+    const response = await articleAxios.get(`?${params}`);
     // console.log(params)
-    // console.log(response.data)
+    console.log(response.data)
     return response.data;
 }
 export const getArticle = async(id: number): Promise<IArticle> => {
-    const response = await axios.get(`https://api.spaceflightnewsapi.net/v4/articles/${id}/`,
-    {
-        headers: {
-            "Content-type" : "Application/json"
-        }
-    })
+    const response = await articleAxios.get(`${id}/`);
     // console.log(params)
     // console.log(response.data)
     return response.data;
 }
 
+export const createArticle = async(props: any): Promise<any> => {
+
+  try{
+    const response = await articleAxios.post("", 
+    {
+      props,
+    }, {
+        headers: {
+            // "Authorization" : `Bearer ${localStorage.getItem(ACCSESS_TOKEN)}`,
+            // "Content-Type": "multipart/form-data",
+        },
+    }
+    );
+    return response.data;
+}catch(e) {
+    if (axios.isAxiosError(e)) {
+        alert(e)
+    } else if (e instanceof Error) {
+        alert(e.message)
+        
+    }
+    return Promise.reject(e);
+}
+}
+
+articleAxios.interceptors.request.use(
+  (request) => {
+      const accessToken = localStorage.getItem(ACCSESS_TOKEN);
+      if (accessToken) {
+          request.headers.setAuthorization(`Bearer ${accessToken}`);
+      }
+      return request;
+  },
+  (error) => {
+      console.log(error.request.status)
+      return Promise.reject(error);
+  }
+)
 // export const crossArticlesPage = async (request: string) : Promise<paginatedArticleList> => {
 //   const response = await axios.get(request,
 //   {

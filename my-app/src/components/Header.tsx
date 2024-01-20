@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
         dispatch(getInputSearch(inputValue))
     }
     return (
-        <div className="py-0 px-4 flex gap-3 bg-custom-color mb-[72px]">
+        <header className="py-0 px-4 flex gap-3 bg-custom-color">
             <Link to="/" className="self-center">
                 <svg width="167" height="56" viewBox="0 0 167 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 4.66667C0 2.08934 2.08934 0 4.66667 0L160.905 0C163.978 0 166.212 2.91767 165.41 5.88378L152.803 52.5504C152.253 54.586 150.406 56 148.298 56H4.66667C2.08934 56 0 53.9107 0 51.3333V4.66667Z" fill="url(#paint0_linear_2_2118)" />
@@ -55,9 +55,10 @@ export const Header: React.FC = () => {
             </div>
 
             <div className="flex gap-x-4">
+                <Link to="/articles/create" className="text-white btn py-8 hover:text-amber-500 transition ease-in-out">Create article</Link>
                 <Link to="/login" className="text-white btn py-8 hover:text-amber-500 transition ease-in-out">Log In</Link>
                 {/* <p className="text-white py-8">Holik Ivan</p> */}
             </div>
-        </div>
+        </header>
     )
 }
