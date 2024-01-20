@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export const themeSlice = createSlice({
     name: 'dark theme',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState: {
         value: false,
     },

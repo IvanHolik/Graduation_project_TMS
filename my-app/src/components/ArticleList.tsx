@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getArticle, getArticles, IArticle, paramsToString } from "../api/getArticles";
-import { getPubishedParam } from "../helperFunctions";
+import { getArticle, getArticles, IArticle} from "../api/articleServise";
+import { getPubishedParam, paramsToString } from "../helperFunctions";
 import { getOffset } from "../store/offsetSlice";
 import { RootState, useAppDispatch, useAppSelector } from "../store/store";
 
@@ -34,8 +34,8 @@ export const ArticleList: React.FC = () => {
 
   const dates = useRef(getPubishedParam(publishedAt));
   dates.current = getPubishedParam(publishedAt);
-  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition ease-in-out";
-  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030] transition ease-in-out";
+  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition ease-in-out" + (!darkTheme && " bg-[#64b1b1]");
+  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030] transition ease-in-out" + (!darkTheme && " bg-[#0ea889] bg-gradient-to-br from-[#134e4a]");
 
 
   const params = paramsToString({
@@ -70,8 +70,9 @@ export const ArticleList: React.FC = () => {
 
 
   return (
-    <div className="container text-white">
-      <div className="flex gap-x-4 mb-9">
+    <div className={darkTheme ?  "text-white bg-[url('./cosmo7.jpg')] bg-no-repeat bg-cover" : "text-black bg-[#b6f0f0]"}>
+      <div className="container">
+      <div className="flex gap-x-4 mb-9 pt-[72px]">
         <h1 className='text-5xl bold font-bold'>Article List</h1>
         {loading && <div
           className="inline-block h-8 w-8 animate-spin self-center rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
@@ -90,7 +91,7 @@ export const ArticleList: React.FC = () => {
          }
         }}
           className="flex gap-x-4">
-          <button id="day" className={publishedAt === "day" ? btnActive : btnClass}>Day</button>
+          <button id="day" className={publishedAt === "day" ? btnActive  : btnClass}>Day</button>
           <button id="week" className={publishedAt === "week" ? btnActive : btnClass}>Week</button>
           <button id="mounth" className={publishedAt === "mounth" ? btnActive : btnClass}>Month</button>
           <button id="year" className={publishedAt === "year" ? btnActive : btnClass}>Year</button>
@@ -100,31 +101,31 @@ export const ArticleList: React.FC = () => {
             setSortBy(e.target.value)
             dispatch(getOffset(0))
           }}
-            className="w-full p-2.5 text-white bg-[#1a605b] border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
-            <option value="search">-</option>
-            <option value="title_contains">Title</option>
-            <option value="summary_contains">Summary</option>
+            className={"w-full p-2.5 bg-[#1a605b] border rounded-md outline-none appearance-none focus:border-indigo-600" + (darkTheme && " text-white") + (!darkTheme && " text-black bg-[#64b1b1]")}>
+            <option className={"" + (!darkTheme && " text-black")} value="search">-</option>
+            <option className={"" + (!darkTheme && " text-black")} value="title_contains">Title</option>
+            <option className={"" + (!darkTheme && " text-black")} value="summary_contains">Summary</option>
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-x-8 gap-y-10 max-w-[1120px] mb-[72px]">
+      <div className="grid grid-cols-4 items-stretch gap-x-8 gap-y-10 max-w-[1120px] mb-[72px]">
         {/* {loading && <p>Loading...</p>} */}
         {articles && articles.map((article: IArticle) => {
           const path = `/articles/:${article.id}`
-          return <Link to={path}>
-            <div className="flex flex-col bg-[#1a605b] border-inherit rounded-2xl" key={article.id}>
+          return <Link className="" to={path}>
+            <div className={"flex flex-col bg-[#1a605b] border-inherit rounded-2xl " + (!darkTheme && "bg-[#64b1b1]")} key={article.id}>
               <div className='img-wrapper'>
                 <img className="w-full h-full max-h-[208px] object-cover border-inherit rounded-t-2xl" src={article.image_url} alt="" />
               </div>
               <div className="p-8">
                 <p className="mb-2">{article.published_at}</p>
-                <p>{article.title}</p>
+                <p className="">{article.title}</p>
               </div>
             </div>
           </Link>
         })}
       </div>
-      <div className="flex justify-between mb-[72px]">
+      <div className="flex justify-between pb-[72px]">
         <div className="flex">
           <button onClick={() => {
             if (prevPage === null) {
@@ -143,7 +144,7 @@ export const ArticleList: React.FC = () => {
               //   setArticlesCount(response.count)
               // })
             }
-          }} className={prevPage === null ? "btn bg-[#bec8c8] px-6 py-3 border-inherit rounded-lg" : "btn bg-[#223030] px-6 py-3 border-inherit rounded-lg"}
+          }} className={prevPage === null ? "btn bg-[#bec8c8] px-6 py-3 border-inherit rounded-lg text-white" : "btn bg-[#223030] px-6 py-3 border-inherit rounded-lg text-white"}
             disabled={prevPage === null && true}>Prev</button>
         </div>
         <div>
@@ -170,10 +171,16 @@ export const ArticleList: React.FC = () => {
               // })
             }
           }}
-            className={nextPage === null ? "btn bg-[#bec8c8] px-6 py-3 border-inherit rounded-lg" : "btn bg-[#223030] px-6 py-3 border-inherit rounded-lg"}
+            className={ 
+              nextPage === null ?
+               "btn bg-[#bec8c8] px-6 py-3 border-inherit rounded-lg text-white" :
+                "btn bg-[#223030] px-6 py-3 border-inherit rounded-lg  text-white"
+              }
             disabled={nextPage === null && true}>Next</button>
         </div>
       </div>
     </div>
+    </div>
+    
   );
 }

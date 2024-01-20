@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     dispatch(changeTheme(darkTheme));
 
     return (
-        <footer className={darkTheme  ? "py-[34px] bg-[#223030]" :  "py-[34px] bg-[#6ca7a7]"}>
+        <footer className="py-[34px] bg-[#223030]">
             <div className="container flex justify-between text-white">
                 <p>
                     &copy; Blogolog

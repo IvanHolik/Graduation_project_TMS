@@ -10,7 +10,7 @@
 }
 
 body {
-  background-color: rgb(19 78 74);
+  /* background-color: #134e4a; */
   /* background-color: #1a605b; */
 }
 .container {
@@ -21,3 +21,6 @@ body {
 .img-wrapper {
   aspect-ratio: 1/0.7;
 }
+/* .article-btn {
+  @apply py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition ease-in-out;
+} */

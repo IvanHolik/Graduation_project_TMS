@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router-dom"
+import { ACCSESS_TOKEN } from "../constants/constants"
 import { useAppDispatch } from "../store/store"
 
 export interface Creds {
@@ -29,11 +30,13 @@ export const LoginPage: React.FC = () => {
     } = useForm({
         mode: "onBlur"
     })
+
     const navigate = useNavigate()
     const onSubmit = (data: any) => {
         alert("Authorization was successful")
         reset()
         navigate("/")
+        localStorage.setItem(ACCSESS_TOKEN, "lalala");
     }
 
     return (
