@@ -30,7 +30,7 @@ export const ShowArticle: React.FC = () => {
     }, [])
 
     return (
-        <div className={darkTheme ?  "text-white bg-[url('./cosmo6.jpg')] bg-no-repeat bg-cover" : "text-black bg-[#b6f0f0]"}>
+        <div className={darkTheme ?  "text-white bg-[url('./cosmo5.jpg')] bg-no-repeat bg-cover" : "text-black bg-[#b6f0f0]"}>
             <div className="container">
                 <div className="flex mb-8 pt-[60px]">
                     <Link className="hover:text-amber-500 transition ease-in-out" to="/">Home</Link>
