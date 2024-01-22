@@ -2,46 +2,50 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getArticles, IArticle} from "../api/articleServise";
 import { getPubishedParam, paramsToString } from "../helperFunctions";
-import { getOffset } from "../store/offsetSlice";
+import { setOffset, setPublishedAt, setSortBy } from "../store/paramSlice";
+import { setParamsSearch } from "../store/paramSlice";
 import { RootState, useAppDispatch, useAppSelector } from "../store/store";
 
-export const ArticleList: React.FC = () => {
+export const ArticleList2: React.FC = () => {
   const [loading, setLoading] = useState(false)
-  const [articles, setArticles] = useState<IArticle[]>()
-  const [limit, setLimit] = useState<number>(12)
+  const [articles, setArticles] = useState<IArticle[] | null>(null)
 
-  const offset = useAppSelector((state: RootState) => state.params.offset)
   const [articlesCount, setArticlesCount] = useState<number>(0)
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const storeOffset = useAppSelector((state: RootState) => state.params.offset)
+  const storeLimit = useAppSelector((state: RootState) => state.params.limit)
+  const storeSortBy = useAppSelector((state: RootState) => state.params.sortBy)
+  const storePublishedAt = useAppSelector((state: RootState) => state.params.published_at_gte);
+
   const searchInputText = useAppSelector((state: RootState) => state.searchInput.value);
   const darkTheme = useAppSelector((state: RootState) => state.theme.value);
   
-  const [sortBy, setSortBy] = useState<string>('search')
-  const [publishedAt, setPublishedAt] = useState<string>('day');
+//   const [sortBy, setSortBy] = useState<string>('search')
+//   const [publishedAt, setPublishedAt] = useState<string>('day');
   const [prevPage, setPrevPage] = useState<string | null>(null);
   const [nextPage, setNextPage] = useState<string | null>(null);
 
   const dispatch = useAppDispatch()
 
   const totalPages = useMemo(() => {
-    return Math.ceil(articlesCount / limit) || 1;
-  }, [articlesCount, limit])
+    return Math.ceil(articlesCount / storeLimit) || 1;
+  }, [articlesCount, storeLimit])
   const currentPage = useMemo(() => {
-    return Math.ceil(offset / limit + 1);
-  }, [offset, limit])
+    return Math.ceil(storeOffset / storeLimit + 1);
+  }, [storeOffset, storeLimit])
 
-  const dates = useRef(getPubishedParam(publishedAt));
-  dates.current = getPubishedParam(publishedAt);
-  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition ease-in-out" + (!darkTheme && " bg-[#64b1b1]");
-  let btnActive = "btn py-4 px-8 border-inherit rounded-lg bg-[#223030] transition ease-in-out" + (!darkTheme && " bg-[#0ea889] bg-gradient-to-br from-[#3edabb]");
+  const dates = useRef(getPubishedParam(storePublishedAt));
+  dates.current = getPubishedParam(storePublishedAt);
+  let btnClass = "btn py-4 px-8 border-inherit rounded-lg bg-[#1a605b] transition-all duration-300 hover:bg-[#2d7171] active:bg-[#52f0f0]" + (!darkTheme && " bg-[#64b1b1]");
+  let btnActive = "btn py-4 px-8 border-inherit rounded-lg transition ease-in-out" + (!darkTheme ? " bg-[#0ea889] bg-gradient-to-br from-[#223030]" : " bg-[#3edabb] bg-gradient-to-br from-[#a935ec]");
 
 
   const params = paramsToString({
-    "limit": limit,
-    "offset": offset,
-    [sortBy]: searchInputText,
+    "limit": storeLimit,
+    "offset": storeOffset,
+    [storeSortBy]: searchInputText,
     "published_at_gte": dates.current
   })
   // console.log(params)
@@ -65,12 +69,12 @@ export const ArticleList: React.FC = () => {
       }
     }
     f();
-   setSearchParams({"limit": limit,
-    "offset": offset,
-    [sortBy]: searchInputText,
+   setSearchParams({"limit": storeLimit,
+    "offset": storeOffset,
+    [storeSortBy]: searchInputText,
     "published_at_gte": dates.current}as any)
     // console.log(dates.current)
-  }, [limit, offset, searchInputText, publishedAt, sortBy])
+  }, [storeLimit, storeOffset, searchInputText, storePublishedAt, storeSortBy])
 
 
   return (
@@ -89,20 +93,20 @@ export const ArticleList: React.FC = () => {
       <div className="flex justify-between gap-x-5 mb-[64px]">
         <div onClick={(e: any) => {
          if(e.target.id) {
-          setPublishedAt(e.target.id)
-          dispatch(getOffset(0))
+          dispatch(setPublishedAt(e.target.id))
+          dispatch(setOffset(0))
          }
         }}
           className="flex gap-x-4">
-          <button id="day" className={publishedAt === "day" ? btnActive  : btnClass}>Day</button>
-          <button id="week" className={publishedAt === "week" ? btnActive : btnClass}>Week</button>
-          <button id="mounth" className={publishedAt === "mounth" ? btnActive : btnClass}>Month</button>
-          <button id="year" className={publishedAt === "year" ? btnActive : btnClass}>Year</button>
+          <button id="day" className={storePublishedAt === "day" ? btnActive  : btnClass}>Day</button>
+          <button id="week" className={storePublishedAt === "week" ? btnActive : btnClass}>Week</button>
+          <button id="mounth" className={storePublishedAt === "mounth" ? btnActive : btnClass}>Month</button>
+          <button id="year" className={storePublishedAt === "year" ? btnActive : btnClass}>Year</button>
         </div>
         <div className="relative w-full lg:max-w-sm">
           <select onChange={(e) => {
-            setSortBy(e.target.value)
-            dispatch(getOffset(0))
+            dispatch(setSortBy(e.target.value))
+            dispatch(setOffset(0))
           }}
             className={"w-full p-2.5 bg-[#1a605b] border rounded-md outline-none appearance-none cursor-pointer focus:border-indigo-600" + (darkTheme && " text-white") + (!darkTheme && " text-black bg-[#64b1b1]")}>
             <option className={"" + (!darkTheme && " text-black")} value="search">-</option>
@@ -111,8 +115,11 @@ export const ArticleList: React.FC = () => {
           </select>
         </div>
       </div>
+      {articles === null || articles.length === 0 && <div className="py-[150px]">
+            <p className={"text-4xl text-center" + (darkTheme ? " text-white" :" text-emerald-900")}>List empty</p>
+        </div> }
       <div className="grid grid-cols-4 items-stretch gap-x-8 gap-y-10 max-w-[1120px] mb-[72px]">
-        {articles ? articles.map((article: IArticle) => {
+        {articles && articles.map((article: IArticle) => {
           const path = `/articles/:${article.id}`
           return <Link className="" to={path} key={article.id}>
             <div className={"flex flex-col bg-[#1a605b] border-inherit rounded-2xl " + (!darkTheme && "bg-[#64b1b1]")}>
@@ -125,7 +132,7 @@ export const ArticleList: React.FC = () => {
               </div>
             </div>
           </Link>
-        }) : <p className="text-center">List empty</p>}
+        })}
       </div>
       <div className="flex justify-between pb-[72px]">
         <div className="flex">
@@ -137,7 +144,7 @@ export const ArticleList: React.FC = () => {
                 setPrevPage(response.previous)
                 setNextPage(response.next)
                 setArticlesCount(response.count)
-                dispatch(getOffset(offset - 12))
+                dispatch(setOffset(storeOffset - 12))
               })
             }
           }} className={prevPage === null ? "btn bg-[#bec8c8] px-6 py-3 border-inherit rounded-lg text-white" : "btn bg-[#223030] px-6 py-3 border-inherit rounded-lg text-white transition-all duration-300 hover:bg-[#2d7171] active:bg-[#52f0f0]"}
@@ -155,7 +162,7 @@ export const ArticleList: React.FC = () => {
                 setPrevPage(response.previous)
                 setNextPage(response.next)
                 setArticlesCount(response.count)
-                dispatch(getOffset(offset + 12))
+                dispatch(setOffset(storeOffset + 12))
               })
             }
           }}

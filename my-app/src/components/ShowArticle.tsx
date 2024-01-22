@@ -30,7 +30,7 @@ export const ShowArticle: React.FC = () => {
     }, [])
 
     return (
-        <div className={darkTheme ?  "text-white bg-[url('./cosmo5.jpg')] bg-no-repeat bg-cover" : "text-black bg-[#b6f0f0]"}>
+        <div className={darkTheme ?  "text-white bg-[url('./cosmo6.jpg')] bg-no-repeat bg-cover" : "text-black bg-[#b6f0f0]"}>
             <div className="container">
                 <div className="flex mb-8 pt-[60px]">
                     <Link className="hover:text-amber-500 transition ease-in-out" to="/">Home</Link>
@@ -38,17 +38,22 @@ export const ShowArticle: React.FC = () => {
                 </div>
                 <div className="pb-12">
                     <h1 className="text-[46px] mb-12">{article?.title}</h1>
-                    <p className="">Publicaton date: {article?.published_at}</p>
-                    <p className="mb-12">Update date: {article?.updated_at}</p>
+                    <div className="flex gap-x-5">
                     <div className="img-wrapper mb-12">
                         <img className="w-full h-full object-cover border-inherit rounded-2xl" src={article?.image_url} alt="" />
                     </div>
+                    <div>
+                    <p className="">Publicaton date: {article?.published_at}</p>
+                    <p className="mb-12">Update date: {article?.updated_at}</p>
+
                     <p className="mb-10">
                         {article?.summary}
                     </p>
                     <div className="mb-10">
                         <p>Source: {article?.news_site}</p>
-                        <p>Read more: <a className="text-amber-200 hover:text-amber-500 transition ease-in-out" href={article?.url}>{article?.url}</a></p>
+                        <p>Read more: <a className={"transition ease-in-out" + (darkTheme ? " text-amber-200 hover:text-amber-500" : " text-purple-700 hover:text-purple-900")} href={article?.url}>{article?.url}</a></p>
+                    </div>
+                    </div>
                     </div>
                     <ul className="flex gap-x-5">
                         <li className="border-2 border-[#223030] p-2 hover:bg-[#0c3181] active:animate-ping transition ease-in-out  cursor-pointer">

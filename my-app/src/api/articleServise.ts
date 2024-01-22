@@ -46,7 +46,7 @@ export interface paginatedArticleList {
 export const getArticles = async(params: string): Promise<paginatedArticleList> => {
     const response = await articleAxios.get(`?${params}`);
     // console.log(params)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
 }
 export const getArticle = async(id: number): Promise<IArticle> => {

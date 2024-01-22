@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { createArticle } from "../api/articleServise";
 import { RootState, useAppSelector } from "../store/store";
 
-export const CreateArticle: React.FC = () => {
+export const HomePage: React.FC = () => {
 
     const [title, setTitle] = useState('');
     const [summary, setSummary] = useState('');
