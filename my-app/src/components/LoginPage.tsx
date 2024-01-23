@@ -11,12 +11,13 @@ export interface Creds {
 
 export const LoginPage: React.FC = () => {
 
-    // const [password, setPassword] = useState('')
-    // const [email, setEmail] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const darkTheme = useAppSelector((state: RootState) => state.theme.value);
+
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
+
     const togglePasswordVisible = (e: any) => {
         e.preventDefault()
         setPasswordVisible((prevState) => !prevState);
@@ -33,29 +34,29 @@ export const LoginPage: React.FC = () => {
         mode: "onBlur"
     })
 
-    const navigate = useNavigate()
     const onSubmit = (data: any) => {
         alert("Authorization was successful")
         reset()
         navigate("/")
         localStorage.setItem(ACCSESS_TOKEN, "lalala");
     }
-
     return (
         <div className={darkTheme ? "text-white bg-[url('./cosmo7.jpg')] bg-no-repeat bg-cover pt-[60px] pb-[152px]" : "text-black bg-[#b6f0f0] pt-[60px] pb-[152px]"}>
             <div className="container">
-                <Link className="mb-8 block hover:text-amber-500 transition ease-in-out" to="/">Back to home</Link>
+                <Link className="flex gap-x-2 mb-8 hover:text-amber-500 transition ease-in-out" to="/">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill={darkTheme ? "white" : "black"} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    <span>Back to home</span></Link>
                 <h2 className="mb-[72px] font-bold text-3xl">Sign In</h2>
                 <form className={"mx-auto p-10 max-w-[724px] border-none rounded-2xl" + (darkTheme ? " bg-[#223030]" : " bg-[#64b1b1]")}>
                     <div className="mb-4 form-check">
                         <label htmlFor="email" className="form-check-label" >Email</label>
                         <input
-                            // type="submit"
                             {...register("email", {
                                 required: true
                             })}
                             id="email"
-                            //   value={email} onChange={(e) => setEmail(e.target.value)}
                             className={"w-full px-4 py-2 text-base border border-gray-300 rounded outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1" + (darkTheme ? " bg-slate-600" : " bg-white")}
                             placeholder="Your email" />
                         {errors?.email && <p className="text-red-500">This field is required</p>}
@@ -71,7 +72,6 @@ export const LoginPage: React.FC = () => {
                                         message: "Minimum of 6 characters"
                                     }
                                 })}
-                                // value={password} onChange={(e) => setPassword(e.target.value)}
                                 type={passwordVisible ? "text" : "password"}
                                 id="password"
                                 className={"w-full px-4 py-2 mb-3 text-base border border-gray-300 rounded outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1" + (darkTheme ? " bg-slate-600" : " bg-white")}
@@ -123,9 +123,8 @@ export const LoginPage: React.FC = () => {
                         <a href="#" className="cursor-pointer hover:text-amber-500 transition ease-in-out">Forgot password?</a>
                     </div>
                     <button type="button"
-                        //  onClick={inlogin}
                         onClick={handleSubmit(onSubmit)}
-                        className="btn bg-[#1a605b] hover:bg-[#019191] mb-8 py-4 w-full border-none rounded-md transition ease-in-out">Sign in</button>
+                        className="form-submit-btn mb-8">Sign in</button>
                     <p className="text-center">Dont't have account? <Link className="underline text-blue-600 hover:text-blue-800" to={'/'}>Sign up</Link></p>
                 </form>
             </div>

@@ -35,13 +35,11 @@ export const CreateArticle: React.FC = () => {
     })
 
     const onSubmit = (e: any) => {
-        // e.preventDefault();
         const article: any = {
             title,
             summary,
             image: file!,
         }
-        // console.log(article)
         createArticle(article)
         setTitle('')
         setSummary('')
@@ -51,9 +49,16 @@ export const CreateArticle: React.FC = () => {
     }
 
     return (
-        <div className={darkTheme ?  "text-white bg-[url('./cosmo7.jpg')] bg-no-repeat bg-cover pt-[60px] pb-[152px]" : "text-black bg-[#b6f0f0] pt-[60px] pb-[152px]"}>
+        <div className={darkTheme ? "text-white bg-[url('./cosmo7.jpg')] bg-no-repeat bg-cover pt-[60px] pb-[152px]" : "text-black bg-[#b6f0f0] pt-[60px] pb-[152px]"}>
             <div className="container">
-                <Link className="mb-8 hover:text-amber-500 transition ease-in-out" to="/">Back to home</Link>
+                <Link className="flex gap-x-2 mb-[32px] hover:text-amber-500 transition ease-in-out" to="/">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill={darkTheme ? "white" : "black"} viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    <span>
+                        Back to home
+                    </span>
+                </Link>
                 <h2 className="mb-[72px] font-bold text-3xl">Create new article</h2>
                 <form className={"mx-auto p-10 max-w-[724px] border-none rounded-2xl" + (darkTheme ? " bg-[#223030]" : " bg-[#64b1b1]")}>
                     <div className="mb-4 form-check">
@@ -65,7 +70,7 @@ export const CreateArticle: React.FC = () => {
                             id="title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className={"w-full px-4 py-2 text-base border border-gray-300 rounded outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1" + (darkTheme ? " bg-slate-600" : " bg-white")}
+                            className={"form-title-input" + (darkTheme ? " bg-slate-600" : " bg-white")}
                             placeholder="Title..." />
                         {errors?.title && <p className="text-red-500">This field is required</p>}
                     </div>
@@ -80,24 +85,19 @@ export const CreateArticle: React.FC = () => {
                             value={summary}
                             onChange={(e) => setSummary(e.target.value)}
                             rows={4}
-                            className={"w-full px-4 py-2 mb-3 text-base border border-gray-300 rounded outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1" + (darkTheme ? " bg-slate-600" : " bg-white") }
+                            className={"form-title-input mb-3" + (darkTheme ? " bg-slate-600" : " bg-white")}
                             placeholder="Leave a summary..."></textarea>
                         {errors?.summary && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div className="mb-[48px] form-check flex flex-col">
-                        <label htmlFor="image" className="form mb-1 mr-2 w-2/5" >Image</label>
+                    <div className="relative mb-[20px] form-check flex flex-col">
                         <input
-                            // {...register("image", {
-                            //     required: true
-                            // })}
-                            className="cursor-pointer w-2/5"
+                            className="opacity-0 hidden absolute"
                             type="file"
                             onChange={onChange}
                             id="image"
                             ref={inputFile}
-                        // value={image}
                         />
-                        {/* {errors?.image && <p className="text-red-500">This field is required</p>} */}
+                        <label className="bg-orange-600 w-1/5 cursor-pointer text-center py-2 px-5 rounded-md transition ease-in-out hover:bg-orange-400" htmlFor="image">Choose file</label>
                     </div>
                     {selectedImage && <div className="mb-3">
                         <img className="w-[150px] h-[150px] mb-2" src={selectedImage} alt="" />
@@ -108,13 +108,12 @@ export const CreateArticle: React.FC = () => {
                                 inputFile.current.type = "file";
                             }
                         }
-                        } className="btn bg-red-500 hover:bg-red-800 mb-8 py-2 w-1/5 border-none rounded-md transition ease-in-out">Remove image</button>
+                        } className="delete-photo-btn">Remove image</button>
                     </div>
                     }
-                    <button onClick={handleSubmit(onSubmit)} className="btn bg-[#1a605b] hover:bg-[#019191] py-4 w-full border-none rounded-md transition ease-in-out" type="button">Submit</button>
+                    <button onClick={handleSubmit(onSubmit)} className="form-submit-btn" type="button">Submit</button>
                 </form>
             </div>
         </div>
-
     )
 }

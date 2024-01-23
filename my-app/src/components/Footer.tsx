@@ -3,13 +3,13 @@ import { RootState, useAppDispatch, useAppSelector } from "../store/store"
 import { changeTheme } from "../store/themeSlice"
 
 export const Footer: React.FC = () => {
-    
+
     const [darkTheme, setDarkTheme] = useState<boolean>(false)
     const dispatch = useAppDispatch()
     dispatch(changeTheme(darkTheme));
 
     return (
-        <footer className="py-[34px] bg-[#223030]">
+        <footer className="py-[34px] bg-[#223030] font-main">
             <div className="container flex justify-between text-white">
                 <p>
                     &copy; Blogolog

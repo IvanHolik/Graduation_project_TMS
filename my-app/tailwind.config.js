@@ -12,6 +12,9 @@ module.exports = {
       },
       gridTemplateRows: {
         'articles': 'repeat(3, minmax(max-content, 1fr))',
+      },
+      fontFamily: {
+        main: ['Montserrat'],
       }
   },
   },
