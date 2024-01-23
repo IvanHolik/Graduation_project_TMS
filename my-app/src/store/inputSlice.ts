@@ -9,10 +9,9 @@ export const searchInputSlice = createSlice({
     reducers: {
         getInputSearch: (state, action: PayloadAction<string>) => {
             state.value = action.payload;
-            // console.log(action.payload);
         }
     }
-  })
+})
 
-  export const {getInputSearch} = searchInputSlice.actions;
-  export default searchInputSlice.reducer;
+export const { getInputSearch } = searchInputSlice.actions;
+export default searchInputSlice.reducer;

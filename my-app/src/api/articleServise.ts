@@ -45,14 +45,10 @@ export interface paginatedArticleList {
 
 export const getArticles = async(params: string): Promise<paginatedArticleList> => {
     const response = await articleAxios.get(`?${params}`);
-    // console.log(params)
-    console.log(response.data)
     return response.data;
 }
 export const getArticle = async(id: number): Promise<IArticle> => {
     const response = await articleAxios.get(`${id}/`);
-    // console.log(params)
-    // console.log(response.data)
     return response.data;
 }
 
@@ -62,12 +58,7 @@ export const createArticle = async(props: any): Promise<any> => {
     const response = await articleAxios.post("", 
     {
       props,
-    }, {
-        headers: {
-            // "Authorization" : `Bearer ${localStorage.getItem(ACCSESS_TOKEN)}`,
-            // "Content-Type": "multipart/form-data",
-        },
-    }
+    },
     );
     return response.data;
 }catch(e) {
@@ -94,14 +85,4 @@ articleAxios.interceptors.request.use(
       return Promise.reject(error);
   }
 )
-// export const crossArticlesPage = async (request: string) : Promise<paginatedArticleList> => {
-//   const response = await axios.get(request,
-//   {
-//       headers: {
-//           "Content-type" : "Application/json"
-//       }
-//   })
-//   // console.log(params)
-//   console.log(response.data)
-//   return response.data;
-// }
+
