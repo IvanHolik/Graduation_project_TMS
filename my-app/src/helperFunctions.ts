@@ -1,5 +1,13 @@
 import { MS_IN_DAY, MS_IN_MOUNTH, MS_IN_WEEK, MS_IN_YEAR } from "./constants/constants";
 
+interface IParams2 {
+  limit: number,
+  offset: number,
+  search?: string,
+  summary_contains?: string,
+  title_contains?: string,
+  published_at_gte: string
+}
 export const getPubishedParam = (dateParam: string): string => {
   let ms = 0;
   switch (dateParam) {
@@ -44,4 +52,11 @@ export const paramsToString = (params: object): string => {
     }
   }, "")
   return result;
+}
+
+export const saveToLS = (param: string, params: IParams2) => {
+ return localStorage.setItem(param, JSON.stringify(params))
+}
+export const getFromToLS = (param: string) : Object => {
+  return JSON.parse(localStorage.getItem(param)!);
 }

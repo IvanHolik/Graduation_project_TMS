@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 export const searchInputSlice = createSlice({
     name: 'search input',
     initialState: {
-        value: '',
+        value: localStorage.getItem('inputValue') || '',
     },
     reducers: {
         getInputSearch: (state, action: PayloadAction<string>) => {

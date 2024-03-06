@@ -10,6 +10,7 @@ export const CreateArticle: React.FC = () => {
     const [summary, setSummary] = useState('');
     const [file, setFile] = useState<any>();
     const [selectedImage, setSelectedImage] = useState<any>();
+    const [error, setError] = useState<any>(null);
     const inputFile = useRef<any>(null);
 
     const darkTheme = useAppSelector((state: RootState) => state.theme.value);
@@ -35,17 +36,25 @@ export const CreateArticle: React.FC = () => {
     })
 
     const onSubmit = (e: any) => {
+        setError(null)
         const article: any = {
             title,
             summary,
             image: file!,
         }
-        createArticle(article)
-        setTitle('')
-        setSummary('')
-        setFile(null)
-        setSelectedImage(null)
-        inputFile.current.value = null;
+        try{
+            createArticle(article)
+            setTitle('')
+            setSummary('')
+            setFile(null)
+            setSelectedImage(null)
+            inputFile.current.value = null;
+        }catch(e) {
+            setError(createArticle(article))
+        }
+        finally{
+            console.log(error)
+        }
     }
 
     return (
@@ -60,6 +69,7 @@ export const CreateArticle: React.FC = () => {
                     </span>
                 </Link>
                 <h2 className="mb-[72px] font-bold text-3xl">Create new article</h2>
+                {error && <p>Server error. Please try to resend the form</p> }
                 <form className={"mx-auto p-10 max-w-[724px] border-none rounded-2xl" + (darkTheme ? " bg-[#223030]" : " bg-[#64b1b1]")}>
                     <div className="mb-4 form-check">
                         <label htmlFor="title" className="form-check-label">Title</label>
